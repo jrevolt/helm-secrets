@@ -56,7 +56,7 @@ while true; do
             echo "Error: secrets file required."
             exit 1
         fi
-        enc "$2"
+        HELM_SECRETS_CMD=enc enc "$2"
         break
         ;;
     dec)
@@ -68,7 +68,7 @@ while true; do
             echo "Error: secrets file required."
             exit 1
         fi
-        dec "$2"
+        HELM_SECRETS_CMD=dec dec "$2"
         break
         ;;
     view)
@@ -80,7 +80,7 @@ while true; do
             echo "Error: secrets file required."
             exit 1
         fi
-        view "$2"
+        HELM_SECRETS_CMD=view view "$2"
         break
         ;;
     edit)
@@ -92,7 +92,7 @@ while true; do
             echo "Error: secrets file required."
             exit 1
         fi
-        edit "$2"
+        HELM_SECRETS_CMD=edit edit "$2"
         break
         ;;
     clean)
