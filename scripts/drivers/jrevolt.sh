@@ -23,7 +23,8 @@ driver_encrypt_file() {
     input="${2}"
     output="${3}"
 
-    yamlenc encrypt -i ${input} -o ${output}
+    #yamlenc encrypt -i ${input} -o ${output}
+    yaml-secrets enc -k "$HELM_SECRETS_KEY" -f ${input} -o ${output}
 }
 
 driver_decrypt_file() {
@@ -36,9 +37,11 @@ driver_decrypt_file() {
     log "driver_decrypt_file: $@"
 
     if [[ "$output" != "" ]]; then
-      yamlenc decrypt -i ${input} -o ${input}
+      #yamlenc decrypt -i ${input} -o ${input}
+      yaml-secrets dec -k "$HELM_SECRETS_KEY" -f ${input} -o ${output}
     else
-      yamlenc decrypt -i ${input} -o /dev/stdout
+      #yamlenc decrypt -i ${input} -o /dev/stdout
+      yaml-secrets dec -k "$HELM_SECRETS_KEY" -f ${input}
     fi
 
 }
@@ -52,10 +55,13 @@ driver_edit_file() {
     tmpdir=$(mktemp -d)
     local tmpfile
     tmpfile="${tmpdir}/$(basename ${input})"
-    yamlenc decrypt -i ${input} -o ${tmpfile}
+
+    #yamlenc decrypt -i ${input} -o ${tmpfile}
+    yaml-secrets dec -k "$HELM_SECRETS_KEY" -f ${input} -o ${tmpfile}
 
     "${EDITOR:-vi}" "${tmpfile}"
 
-    yamlenc encrypt -i ${tmpfile} -o ${input}
+    #yamlenc encrypt -i ${tmpfile} -o ${input}
+    yaml-secrets enc -k "$HELM_SECRETS_KEY" -f ${input} -o ${output}
 
 }
